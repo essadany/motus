@@ -2,32 +2,37 @@ const express = require('express');
 const redis = require('redis');
 const app = express();
 const path = require('path');
+
 app.use(express.json()); // Middleware to parse JSON bodies
-/*
+
 // Create Redis client
-const client = redis.createClient({
-  url: 'redis://default:@localhost:6379' // Update this with your Redis connection string
-});
-client.connect();
-*/
-app.use(express.static(path.join(__dirname, 'public')));
-app.get('/', (req, res) => {
-  res.send('Hello World!')
+
+const client = redis.createClient();
+
+client.on('error', err => console.log('Redis Client Error', err));
+ client.connect().then(() => {
+  console.log('Connected to Redis');
+ })
+/* await client.hSet('user-session:123', {
+  username : 'YASSINE',
+  age: 22,
+  score: 0,
+  tries: 0
 })
-// API to set score
-app.post('/setscore', async (req, res) => {
-  const { username, score, tries } = req.body;
-  // Store the score in Redis
-  await client.hSet('scores', username, JSON.stringify({ score, tries }));
-  res.send('Score updated successfully');
+ */
+app.use(express.static(path.join(__dirname, 'public')));
+
+
+// API to get score from the other service
+
+const axios = require('axios');
+app.get('/getscore', async (req, res) => {
+  //const response = await axios.get('http://localhost:5000/setscore');
+  //res.json(response.data); 
+  res.json("coucou")
 });
 
-// API to get score
-app.get('/getscore/:username', async (req, res) => {
-  const { username } = req.params;
-  const result = await client.hGet('scores', username);
-  res.json(result ? JSON.parse(result) : {});
-});
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port http://localhost:${PORT}`));

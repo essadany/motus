@@ -1,0 +1,1 @@
+$.get('/getscore').then((data)=>{console.log(data)})
