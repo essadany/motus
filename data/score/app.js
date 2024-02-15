@@ -1,14 +1,19 @@
 const express = require('express');
 const redis = require('redis');
 const app = express();
+const path = require('path');
 app.use(express.json()); // Middleware to parse JSON bodies
-
+/*
 // Create Redis client
 const client = redis.createClient({
   url: 'redis://default:@localhost:6379' // Update this with your Redis connection string
 });
 client.connect();
-
+*/
+app.use(express.static(path.join(__dirname, 'public')));
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
 // API to set score
 app.post('/setscore', async (req, res) => {
   const { username, score, tries } = req.body;
@@ -25,5 +30,5 @@ app.get('/getscore/:username', async (req, res) => {
 });
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(`Server running on port http://localhost:${PORT}`));
 
