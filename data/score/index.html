@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Motus Score</title>
+    <script src="app.js" defer></script>
+    <!--add bootstrap css-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!--add tailwindcss-->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@npm:@tailwindcss/postcss7@1" rel="stylesheet">
+
+</head>
+<body>
+    <div class="mt-4">
+    <div class="text-center">
+        <a href="localhost:3000">Back to the game</a>
+    </div>
+    <div class="container-sm">
+        <!--add a  link to go back to the motus game page-->
+    <table class="table   mt-4 w-full text-center rounded shadow-lg overflow-hidden">
+        <thead class="btn-dark">
+            <td>Info</th>
+            <td>Value</th>
+        </thead>
+        <tbody>
+        <tr>
+            <td>Nb Word(s) found</td>
+            <td id="score"></td>
+        </tr>
+        <tr>
+            <td>Average try</td>
+            <td id="tries">
+            </td>
+        </tr>
+        </table>
+        
+    </table>
+    </div>
+</div>
+</body>
+</html>
