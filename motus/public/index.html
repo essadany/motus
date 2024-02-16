@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Motus Game</title>
+    <link rel="stylesheet" href="style.css"> <!-- Assurez-vous d'avoir ce fichier pour les styles -->
+    <script src="script.js" defer></script> <!-- Script JavaScript pour la logique du jeu -->
+    <!--add bootstrap css-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!--add tailwindcss-->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@npm:@tailwindcss/postcss7@1" rel="stylesheet">
+</head>
+<body>
+    <!--add a gloabel div to center the content  -->
+    <div class="container-sm text-center mt-4">
+    <h1>Simple Motus Game</h1>
+    <!--add a link to go to the score page-->
+    <a href="http://localhost:5000/">Go to the score page</a>
+    <div class="mt-2">
+<form id="wordForm">
+        <input type="text" id="wordInput" name="word" placeholder="Entrez votre mot ici" required>
+        <button class="btn btn-sm btn-success" type="submit">Vérifier</button>
+    </form>
+    </div>
+    <div class="mt-2" id="result"></div>
+    <!-- Plus de contenu HTML si nécessaire -->
+    </div>
+    <script src="script.js" defer></script>
+</body>
+</html>
+<style>
+    .correct {
+    background-color: green;
+}
+
+.present {
+    background-color: orange;
+}
+
+.absent {
+    background-color: transparent; /* ou toute autre couleur que vous préférez */
+}
+</style>
