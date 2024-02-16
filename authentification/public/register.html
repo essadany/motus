@@ -7,21 +7,25 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!--add tailwindcss-->
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@npm:@tailwindcss/postcss7@1" rel="stylesheet">
-    <title>Motus Login</title>
+    <title>Motus Register</title>
 </head>
 <body>
     <div class="container-sm text-center mt-4">
-    <h2>Login</h2>
-    <form action="/login" method="POST">
+    <h2>Register</h2>
+    <form action="/register" method="POST">
         <div>
             <label for="username">Login:</label>
             <input type="text" id="username" name="username" required>
         </div>
         <div>
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+            <input  type="password" id="password" name="password" required>
         </div>
-        <button type="submit">Login</button>
+        <div>
+            <label for="confirmPassword">Password (Confirm):</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+        </div>
+        <button type="submit">Register</button>
     </form>
     </div>
 </body>

@@ -21,7 +21,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
           resultDiv.innerHTML = ''; // Clear previous results
 
           // Display results
-          data.forEach(item => {
+          data.result.forEach(item => {
               const span = document.createElement('span');
               span.textContent = item.letter;
               span.classList.add(item.class);
