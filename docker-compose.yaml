@@ -1,6 +1,37 @@
 version: '3.8'
 
 services:
+  motus-app1:
+    build:
+      context: ./motus
+    ports:
+      - "3000:3000"
+
+  motus-app2: 
+    build: ./motus
+    ports:
+      - "4000:3000"
+
+  haproxy:
+    build: ./motus/haproxy
+    ports:
+      - "8080:80"
+    depends_on:
+      - motus-app1
+      - motus-app2
+  
+  auth_in_motus:
+    build: ./authentification
+    ports:
+      -"6000:6000"
+
+  score:
+    build: ./score
+    ports:
+      - "5000:5000"
+    depends_on:
+      - motus-app1
+      - motus-app2
   redis:
     image: redis:latest
     ports:
@@ -19,4 +50,6 @@ services:
 
 volumes:
   redis-data:
+
+
 

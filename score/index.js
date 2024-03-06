@@ -7,13 +7,15 @@ app.use(express.json()); // Middleware to parse JSON bodies
 
 // Create Redis client
 
-const client = redis.createClient();
+const client = redis.createClient(
+  { host: 'localhost', port: 6379 }
+);
 
 client.on('error', err => console.log('Redis Client Error', err));
 client.connect().then(() => {
   console.log('Connected to Redis');
  })
- await client.hSet('user-session:123', {
+client.hSet('user-session:123', {
   username : 'YASSINE',
   age: 22,
   score: 0,
@@ -29,14 +31,15 @@ app.use(express.static(path.join(__dirname, 'public')));
 //const axios = require('axios');
 app.post('/setscore', async (req, res) => {
   const received_data = req.body;
-  const { username, score, tries } = req.body;
+  const { username, score, tries } = received_data;
   await client.hSet(`user-session:${username}`, {
     username: username,
     score: score,
     tries: tries
   });
-  res.json(received_data); 
   console.log('received_data : ',received_data);
+  //send this data to frontend js
+  res.json({ score, tries });
 });
 // Endpoint to get scores
 app.get('/', async (req, res) => {

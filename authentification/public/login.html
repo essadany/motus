@@ -1,28 +1,43 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--add bootstrap css-->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!--add tailwindcss-->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@npm:@tailwindcss/postcss7@1" rel="stylesheet">
-    <title>Motus Login</title>
-</head>
-<body>
-    <div class="container-sm text-center mt-4">
-    <h2>Login</h2>
-    <form action="/login" method="POST">
-        <div>
-            <label for="username">Login:</label>
-            <input type="text" id="username" name="username" required>
-        </div>
-        <div>
-            <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
-        </div>
-        <button type="submit">Login</button>
+<html>
+  <head> </head>
+  <body>
+    <form method="post">
+      <h2>Login</h2>
+      <div class="input-field">
+        <input
+          type="text"
+          name="username"
+          id="username"
+          placeholder="Enter Username"
+          required
+        />
+      </div>
+      <div class="input-field">
+        <input
+          type="password"
+          name="password"
+          id="password"
+          placeholder="Enter Password"
+          required
+        />
+      </div>
+      <input type="submit" value="LogIn" />
     </form>
-    </div>
-</body>
+    <script>
+      var a = document.createElement("a");
+      var linkText = document.createTextNode("Cliquez ici pour s'inscrire");
+      a.appendChild(linkText);
+      a.title = "Cliquez ici pour s'inscrire";
+      var url = window.location.href;
+      var query = window.location.search;
+      if (url.includes(query)) {
+        a.href =
+          "http://localhost:" + window.location.port + "/register" + query;
+      } else {
+        a.href = "http://localhost:" + window.location.port + "/register";
+      }
+      document.body.appendChild(a);
+    </script>
+  </body>
 </html>

@@ -1,32 +1,71 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <!--add bootstrap css-->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <!--add tailwindcss-->
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@npm:@tailwindcss/postcss7@1" rel="stylesheet">
-    <title>Motus Register</title>
-</head>
-<body>
-    <div class="container-sm text-center mt-4">
-    <h2>Register</h2>
-    <form action="/register" method="POST">
-        <div>
-            <label for="username">Login:</label>
-            <input type="text" id="username" name="username" required>
-        </div>
-        <div>
-            <label for="password">Password:</label>
-            <input  type="password" id="password" name="password" required>
-        </div>
-        <div>
-            <label for="confirmPassword">Password (Confirm):</label>
-            <input type="password" id="confirmPassword" name="confirmPassword" required>
-        </div>
-        <button type="submit">Register</button>
+<html>
+  <head> </head>
+  <body>
+    <form method="post">
+      <h2>Register</h2>
+      <div class="input-field">
+        <input
+          type="text"
+          name="firstname"
+          id="firstname"
+          placeholder="Enter  first name"
+          required
+        />
+      </div>
+      <div class="input-field">
+        <input
+          type="text"
+          name="lastname"
+          id="lastname"
+          placeholder="Enter  last name"
+          required
+        />
+      </div>
+      <div class="input-field">
+        <input
+          type="text"
+          name="username"
+          id="username"
+          placeholder="Enter  user name"
+          required
+        />
+      </div>
+      <div class="input-field">
+        <input
+          type="password"
+          name="password"
+          id="password"
+          placeholder="Enter Password"
+          required
+        />
+      </div>
+      <div class="input-field">
+        <input
+          type="password"
+          name="password2"
+          id="password2"
+          placeholder="Enter again your password"
+          required
+        />
+      </div>
+
+      <input type="submit" value="Register" />
     </form>
-    </div>
-</body>
+    <script>
+      var a = document.createElement("a");
+      var linkText = document.createTextNode("Cliquer ici pour se connecter");
+      a.appendChild(linkText);
+      a.title = "Cliquer ici pour se connecter";
+      var url = window.location.href;
+      var query = window.location.search;
+      if (url.includes(query)) {
+        a.href =
+          "http://localhost:" + window.location.port + "/authorize" + query;
+      } else {
+        a.href = "http://localhost:" + window.location.port + "/authorize";
+      }
+      document.body.appendChild(a);
+    </script>
+  </body>
 </html>

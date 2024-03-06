@@ -1,55 +1,115 @@
-const express = require('express');
-const session = require('express-session');
-const bodyParser = require('body-parser');
-
+const express = require("express");
 const app = express();
-const PORT = 7000;
+const port = process.env.PORT || 5000;
+const cookieParser = require("cookie-parser");
+const path = require("path");
+const store = require("store2");
+const jwt = require("jsonwebtoken");
+require("dotenv").config();
+const cors = require("cors");
+app.use(cors());
+store.set("test", { firstname: "test", lastname: "test", password: "test" });
+app.use("/", express.static(path.join(__dirname, "www")));
+app.use(cookieParser());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-app.use(express.static('public')); // Serve static files from the public directory
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(session({
-  secret: 'yourSecretKey',
-  resave: false,
-  saveUninitialized: true,
-  name: 'sessionId'
-}));
+// a variable to save a session
 
-// Middleware to check session
-app.use((req, res, next) => {
-  if (req.session.user || req.path === '/login.html') {
+function generateAccessToken(user) {
+  return jwt.sign(user, process.env.ACCESS_TOKEN_SECRET, {
+    expiresIn: "1800s",
+  });
+}
+
+//Handle the 404 error and change the url with the /autorize route.
+
+app.get("*", (req, res, next) => {
+  if (
+    (req.query.client_id != process.env.CLIENT_ID) &
+    (req.query.scope != "motus_app")
+  ) {
+    console.log("Non authorized to go here");
+    res.status(403).send("Error 403 : non authorized");
+  } else {
     next();
-  } else {
-    res.redirect('/login.html');
   }
 });
 
-// Dummy user for demonstration purposes
-const user = {
-  username: 'simon.gomez',
-  password: 'password123' // Use hashed passwords in production
-};
-
-// Login endpoint
-app.post('/login', (req, res) => {
-  const { username, password } = req.body;
-  if (username === user.username && password === user.password) {
-    req.session.user = username; // Save user in session
-    res.redirect('/main.html'); // Redirect to the main game page
-  } else {
-    res.send('Login failed: Incorrect username or password');
-  }
+app.get("/authorize", (req, res, next) => {
+  res.sendFile("/login.html", { root: __dirname + "/public" });
 });
-// Registration endpoint
-app.post('/register', (req, res) => {
-    const { username, password } = req.body;
-    if (!user[username]) { // Check if user does not already exist
-      user[username] = { username, password }; // Add user
-      res.send('Registration successful');
-    } else {
-      res.send('Registration failed: User already exists');
+
+app.post("/authorize", (req, res) => {
+  var check = false;
+  store.each((value, key) => {
+    if (value === req.body.username && key.password === req.body.password) {
+      check = true;
     }
   });
-  
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+  if (check) {
+    // Generate a token for the user
+    const access_token = generateAccessToken({ username: req.body.username });
+    console.log(access_token);
+    console.log(req.query.redirect_uri);
+    res.status(302).redirect(req.query.redirect_uri + "?token=" + access_token);
+    //res.redirect("http://localhost:3000/");
+    //res.send(`Hey there, welcome <a href=\'/logout'>click to logout</a>`);
+  } else {
+    res.send("Invalid username or password");
+  }
+});
+
+app.get("/logout", (req, res) => {
+  req.session.destroy();
+  res.redirect("/");
+});
+
+app.get("/register", (req, res) => {
+  res.sendFile("/register.html", { root: __dirname + "/public" });
+});
+
+app.post("/register", (req, res) => {
+  var check = false;
+  store.each((value, key) => {
+    if (value === req.body.username) {
+      check = true;
+    }
+  });
+  if (check) {
+    res.status(201).json({
+      erreur: "Il existe déjà cet username",
+    });
+  } else {
+    if (req.body.password != req.body.password2) {
+      res.status(201).json({
+        erreur: "Mauvais mot de passe pour cette session",
+      });
+    } else {
+      store.set(req.body.username, {
+        firstname: req.body.firstname,
+        lastname: req.body.lastname,
+        password: req.body.password,
+      });
+      console.log(store.get(req.body.username));
+      var urlconnexion =
+        req.protocol +
+        "://" +
+        req.get("host") +
+        "/authorize?client_id=" +
+        req.query["client_id"] +
+        "&scope=" +
+        req.query["scope"] +
+        "&redirect_uri=" +
+        req.query["redirect_uri"];
+      res.status(201).json({
+        message: "Vous pouvez vous connecter ",
+        Clique_Here: urlconnexion,
+      });
+    }
+  }
+});
+
+app.listen(port, () => {
+  console.log(`Example app listening on port ${port}`);
 });
