@@ -8,6 +8,7 @@ sequenceDiagram
     note right of USER : if user is not in redis database
     USER->>+AUTHENTIFICATION: POST /login
     AUTHENTIFICATION->>REDIS_AUTH: verify if the username and password are correct
+    REDIS_AUTH->>AUTHENTIFICATION: OK
     AUTHENTIFICATION->>USER:OK
     note left of AUTHENTIFICATION: create a session and store username
 ```
