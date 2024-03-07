@@ -34,9 +34,4 @@ flowchart LR
     motus-->|getscore|score
     motus-->|setscore|score
     score-->redis
-    
-flowchart LR
-    user-->motus
-    motus-->|addscore user,  mot, +1 : isWordFound|score
-    score-->redis
-    
+![MOTUS_SCORE](https://github.com/essadany/motus/assets/100642085/7fb9f715-2294-496e-9634-0d004f288e88)
