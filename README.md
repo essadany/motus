@@ -2,35 +2,31 @@
 ```mermaid
 sequenceDiagram
     USER->>AUTHENTIFICATION:POST /register
-    AUTHENTIFICATION->>REDIS: store {username, passwrod, score : 0, tries:0}
-    REDIS->>AUTHENTIFICATION:OK
+    AUTHENTIFICATION->>REDIS_AUTH: check if the username isn't already exits in redis then store {firstname, lastname, username, passwrod}
+    REDIS_AUTH->>AUTHENTIFICATION:OK
     AUTHENTIFICATION->>+USER:OK
     note right of USER : if user is not in redis database
     USER->>+AUTHENTIFICATION: POST /login
+    AUTHENTIFICATION->>REDIS_AUTH: verify if the username and password are correct
     AUTHENTIFICATION->>USER:OK
-    AUTHENTIFICATION->>+LOCALSTORAGE : setLocalStorage(username)
+    note left of AUTHENTIFICATION: create a session and store username
 ```
 #Phase de jeux
 ```mermaid
 sequenceDiagram
-    MOTUS->>+LOCALSTORAGE : GET /
-    note left of LOCALSTORAGE : get the username to identify the user
-    LOCALSTORAGE->>MOTUS: username
     USER->>+MOTUS:POST /checkword  inputWord
-    note right of MOTUS : calcul nb tentative + score
+    note right of MOTUS : calcul nb tentative(tries) + score
     MOTUS->>USER : result
+    note left of the MOTUS: verify if the session exists (user authentified) then get the username from the session
     MOTUS->>+SCORE : POST /setscore {username, score, tries}
-    SCORE->>REDIS : store {username, score, tries}
-    REDIS->>SCORE : OK
+    SCORE->>REDIS_SCOORE : store {username, score, tries}
+    REDIS_SCORE->>SCORE : OK
     SCORE->>MOTUS : OK
 ```
 #Phase de visualisation du score
 ```mermaid
 sequenceDiagram
-    SCORE->>+LOCALSTORAGE : GET /
-    note left of LOCALSTORAGE : get the username to identify the user
-    LOCALSTORAGE->>SCORE: username
-    SCORE->>+REDIS : GET /getscore
+    SCORE->>+REDIS_SCORE : GET /getscore
     REDIS->>SCORE : OK
 ```
 flowchart LR
