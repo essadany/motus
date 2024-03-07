@@ -27,8 +27,10 @@ sequenceDiagram
 # Phase de visualisation du score
 ```mermaid
 sequenceDiagram
-    SCORE->>AUTHENTIFICATION : get username using session
-    AUTHENTIFICATION->>SCORE : OK
+    USER->>AUTHENTIFICATION : get username using session
+    AUTHENTIFICATION->>USER : OK
+    USER->>SCORE : send username
+    SCORE->>USER : OK
     SCORE->>+REDIS_SCORE : GET /getscore
     note left of REDIS_SCORE : username is knowen from session
     REDIS_SCORE->>SCORE : OK
