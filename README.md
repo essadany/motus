@@ -17,7 +17,7 @@ sequenceDiagram
     USER->>+MOTUS:POST /checkword  inputWord
     note right of MOTUS : calcul nb tentative(tries) + score
     MOTUS->>USER : result
-    note left of the MOTUS: verify if the session exists (user authentified) then get the username from the session
+    note left of MOTUS: verify if the session exists (user authentified) then get the username from the session
     MOTUS->>+SCORE : POST /setscore {username, score, tries}
     SCORE->>REDIS_SCOORE : store {username, score, tries}
     REDIS_SCORE->>SCORE : OK
