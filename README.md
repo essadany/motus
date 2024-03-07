@@ -1,3 +1,5 @@
+
+```mermaid
 sequenceDiagram
     USER->>+MOTUS:POST /checkword  inputWord
     note left of MOTUS : calcul nb tentative + score
@@ -7,7 +9,7 @@ sequenceDiagram
     SCORE->>REDIS : store {username, score, tries}
     REDIS->>SCORE : OK
     SCORE->>MOTUS : OK
-
+```
 flowchart LR
     user-->motus
     motus-->|getscore|score
