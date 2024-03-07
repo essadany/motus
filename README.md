@@ -27,7 +27,7 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     SCORE->>+REDIS_SCORE : GET /getscore
-    REDIS->>SCORE : OK
+    REDIS_SCORE->>SCORE : OK
 ```
 flowchart LR
     user-->motus
