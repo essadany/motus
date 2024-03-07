@@ -19,7 +19,7 @@ sequenceDiagram
     MOTUS->>USER : result
     note left of MOTUS: verify if the session exists (user authentified) then get the username from the session
     MOTUS->>+SCORE : POST /setscore {username, score, tries}
-    SCORE->>REDIS_SCOORE : store {username, score, tries}
+    SCORE->>REDIS_SCORE : store {username, score, tries}
     REDIS_SCORE->>SCORE : OK
     SCORE->>MOTUS : OK
 ```
@@ -29,9 +29,11 @@ sequenceDiagram
     SCORE->>+REDIS_SCORE : GET /getscore
     REDIS_SCORE->>SCORE : OK
 ```
+```mermaid
 flowchart LR
     user-->motus
     motus-->|getscore|score
     motus-->|setscore|score
     score-->redis
+```
 ![MOTUS_SCORE](https://github.com/essadany/motus/assets/100642085/7fb9f715-2294-496e-9634-0d004f288e88)
