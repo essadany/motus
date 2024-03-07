@@ -49,6 +49,24 @@
         a.href = "http://localhost:" + window.location.port + "/register";
       }
       document.body.appendChild(a);
+      // submit the form
+      $("form").submit(function (e) {
+        e.preventDefault();
+        var username = $("#username").val();
+        var password = $("#password").val();
+        $.ajax({
+          type: "POST",
+          url: "http://localhost:5001/login",
+          data: { username: username, password: password },
+          success: function (data) {
+            if (data.status === "success") {
+              window.location.href = "http://localhost:5001/";
+            } else {
+              alert("Invalid username or password");
+            }
+          },
+        });
+      });
     </script>
   </body>
 </html>

@@ -78,7 +78,22 @@
         a.href = "http://localhost:" + window.location.port + "/";
       }
       document.body.appendChild(a);
-      
+      //fetch the data from the form
+      $("form").submit(function (e) {
+        e.preventDefault();
+        var form = $(this);
+        var url = form.attr("action");
+            //send this data to the server
+            $.ajax({
+              type: "POST",
+              url: "http://localhost:5001/register",
+              data: data,
+              success: function (data) {
+                console.log(data);
+              },
+            });
+      });
+
     </script>
   </body>
 </html>

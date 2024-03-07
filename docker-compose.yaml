@@ -32,22 +32,36 @@ services:
     depends_on:
       - motus-app1
       - motus-app2
-  redis:
+  redis_score:
     image: redis:latest
     ports:
       - "6379:6379"
     volumes:
       - redis-data:/data
-
-  redisinsight:
-    image: redislabs/redisinsight:latest
+  
+  redis_auth:
+    image: redis:latest
     ports:
-      - "8001:8001"
-    environment:
-      - REDISINSIGHT_HOST=0.0.0.0
-    depends_on:
-      - redis
+      - "6380:6379"
+    volumes:
+      - redis-data:/data
 
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - 3000:6000
+    restart: unless-stopped
+    networks:
+      - monitor-net
+  loki:
+    image: grafana/loki
+    container_name: loki
+    ports:
+      - 3100:3100
+    restart: unless-stopped
+    networks:
+      - monitor-net
 volumes:
   redis-data:
 
