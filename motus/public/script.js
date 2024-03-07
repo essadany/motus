@@ -18,6 +18,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
         })
         .then(response => response.json())
         .then(data => {
+            console.log("displaying score data")
+            console.log(data);
+
             resultDiv.innerHTML = ''; // Clear previous results
   
             // Display results

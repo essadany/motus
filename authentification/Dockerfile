@@ -8,7 +8,7 @@ WORKDIR /src
 COPY . .
 
 # Install any dependencies
-RUN npm install express axios cookie-parser store2 jsonwebtoken dotenv cors
+RUN npm install express express-session axios cookie-parser store2 jsonwebtoken dotenv cors
 
 
 # Define the command to run the app

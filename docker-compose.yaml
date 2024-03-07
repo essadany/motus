@@ -23,7 +23,7 @@ services:
   auth_in_motus:
     build: ./authentification
     ports:
-      -"6000:6000"
+      - "5001:5001"
 
   score:
     build: ./score

@@ -2,9 +2,10 @@ const express = require('express');
 const redis = require('redis');
 const app = express();
 const path = require('path');
+const { get } = require('http');
 
 app.use(express.json()); // Middleware to parse JSON bodies
-
+let username = 'sutdent-laptop';
 // Create Redis client
 
 const client = redis.createClient(
@@ -15,35 +16,36 @@ client.on('error', err => console.log('Redis Client Error', err));
 client.connect().then(() => {
   console.log('Connected to Redis');
  })
-client.hSet('user-session:123', {
-  username : 'YASSINE',
-  age: 22,
-  score: 0,
-  tries: 0
-})
+
 
 app.use(express.static(path.join(__dirname, 'public')));
-
-
+// get the data form redis
+app.get('/getscore',  (req, res) => {
+  client.hGetAll(`user-session:${username}`).then((user) => {
+    console.log('user : ',user);
+    res.json(user);
+  })
+}
+);
 
 // API to get score from the other service
 
-//const axios = require('axios');
 app.post('/setscore', async (req, res) => {
   const received_data = req.body;
   const { username, score, tries } = received_data;
-  await client.hSet(`user-session:${username}`, {
-    username: username,
-    score: score,
-    tries: tries
+  //store the data in redis
+  await client.hIncrBy(`user-session:${username}`, 'score', score);
+  await client.hIncrBy(`user-session:${username}`, 'tries', tries);
+  console.log('received_data : ',received_data);  
   });
-  console.log('received_data : ',received_data);
-  //send this data to frontend js
-  res.json({ score, tries });
-});
+
 // Endpoint to get scores
 app.get('/', async (req, res) => {
-  const user = await client.get('user-session:123');
+  //get the username from local storage
+  username = localStorage.getItem('username');
+  
+
+  /* const user = await client.get('user-session:123');
   console.log('user : ',user);
   try {
     const scoreResponse = await axios.post('http://localhost:3000/getscore', {
@@ -56,7 +58,7 @@ app.get('/', async (req, res) => {
 } catch (error) {
     console.error('Error posting to score service:', error);
     res.status(500).json({ error: "Erreur lors de la communication avec le service de score" });
-}
+} */
 });
 
 

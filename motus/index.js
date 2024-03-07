@@ -8,6 +8,7 @@ const os = require('os');
 const port = process.env.PORT || 3000; // Utilise la variable d'environnement PORT, ou 3000 par défaut
 let score = 0;
 let tries = 0;
+let username = 'useranme';
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
 
@@ -21,6 +22,8 @@ app.post('/getscore', async (req, res) => {
 });
 app.get('/', (req, res) => {
   res.send('Hello World!')
+  console.log(req.session.username);
+  username = req.session.username;
 })
 const filePath = path.join(__dirname, 'liste_francais_utf8.txt');
 var getWordOfTheDay = (filteredWords) => {
