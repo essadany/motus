@@ -1,4 +1,4 @@
-#Phase d'authentification
+# Phase d'authentification
 ```mermaid
 sequenceDiagram
     USER->>AUTHENTIFICATION:POST /register
@@ -8,27 +8,34 @@ sequenceDiagram
     note right of USER : if user is not in redis database
     USER->>+AUTHENTIFICATION: POST /login
     AUTHENTIFICATION->>REDIS_AUTH: verify if the username and password are correct
+    REDIS_AUTH->>AUTHENTIFICATION: OK
     AUTHENTIFICATION->>USER:OK
     note left of AUTHENTIFICATION: create a session and store username
 ```
-#Phase de jeux
+# Phase de jeux
 ```mermaid
 sequenceDiagram
     USER->>+MOTUS:POST /checkword  inputWord
-    note right of MOTUS : calcul nb tentative(tries) + score
+    note left of MOTUS : calcul nb tentative(tries) + score
     MOTUS->>USER : result
     note left of MOTUS: verify if the session exists (user authentified) then get the username from the session
     MOTUS->>+SCORE : POST /setscore {username, score, tries}
-    SCORE->>REDIS_SCOORE : store {username, score, tries}
+    SCORE->>REDIS_SCORE : store {username, score, tries}
     REDIS_SCORE->>SCORE : OK
     SCORE->>MOTUS : OK
 ```
-#Phase de visualisation du score
+# Phase de visualisation du score
 ```mermaid
 sequenceDiagram
+    USER->>AUTHENTIFICATION : get username using session
+    AUTHENTIFICATION->>USER : OK
+    USER->>SCORE : send username
+    SCORE->>USER : OK
     SCORE->>+REDIS_SCORE : GET /getscore
+    note left of REDIS_SCORE : username is knowen from session
     REDIS_SCORE->>SCORE : OK
 ```
+
 flowchart LR
     user-->motus
     motus-->|getscore|score
