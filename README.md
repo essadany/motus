@@ -1,4 +1,4 @@
-#Phase d'authentification
+# Phase d'authentification
 ```mermaid
 sequenceDiagram
     USER->>AUTHENTIFICATION:POST /register
@@ -11,7 +11,7 @@ sequenceDiagram
     AUTHENTIFICATION->>USER:OK
     note left of AUTHENTIFICATION: create a session and store username
 ```
-#Phase de jeux
+# Phase de jeux
 ```mermaid
 sequenceDiagram
     USER->>+MOTUS:POST /checkword  inputWord
@@ -23,7 +23,7 @@ sequenceDiagram
     REDIS_SCORE->>SCORE : OK
     SCORE->>MOTUS : OK
 ```
-#Phase de visualisation du score
+# Phase de visualisation du score
 ```mermaid
 sequenceDiagram
     SCORE->>+REDIS_SCORE : GET /getscore
