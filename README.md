@@ -29,11 +29,10 @@ sequenceDiagram
     SCORE->>+REDIS_SCORE : GET /getscore
     REDIS_SCORE->>SCORE : OK
 ```
-```mermaid
+
 flowchart LR
     user-->motus
     motus-->|getscore|score
     motus-->|setscore|score
     score-->redis
-```
 ![MOTUS_SCORE](https://github.com/essadany/motus/assets/100642085/7fb9f715-2294-496e-9634-0d004f288e88)
