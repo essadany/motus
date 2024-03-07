@@ -5,12 +5,12 @@ sequenceDiagram
     AUTHENTIFICATION->>REDIS: store {username, passwrod, score : 0, tries:0}
     REDIS->>AUTHENTIFICATION:OK
     AUTHENTIFICATION->>+USER:OK
-    note left of USER : if user is not in redis database
+    note right of USER : if user is not in redis database
     USER->>+AUTHENTIFICATION: POST /login
     AUTHENTIFICATION->>USER:OK
     AUTHENTIFICATION->>+LOCALSTORAGE : setLocalStorage(username)
     MOTUS->>+LOCALSTORAGE : GET /
-    note left of LOCALSTORAGE : get the username to identify the user
+    note right of LOCALSTORAGE : get the username to identify the user
 ```
 #Phase de jeux
 ```mermaid
