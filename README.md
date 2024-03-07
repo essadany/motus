@@ -16,7 +16,7 @@ sequenceDiagram
 ```mermaid
 sequenceDiagram
     USER->>+MOTUS:POST /checkword  inputWord
-    note right of MOTUS : calcul nb tentative(tries) + score
+    note left of MOTUS : calcul nb tentative(tries) + score
     MOTUS->>USER : result
     note left of MOTUS: verify if the session exists (user authentified) then get the username from the session
     MOTUS->>+SCORE : POST /setscore {username, score, tries}
@@ -27,7 +27,10 @@ sequenceDiagram
 # Phase de visualisation du score
 ```mermaid
 sequenceDiagram
+    SCORE->>AUTHENTIFICATION : get username using session
+    AUTHENTIFICATION->>SCORE : OK
     SCORE->>+REDIS_SCORE : GET /getscore
+    note left of REDIS_SCORE : username is knowen from session
     REDIS_SCORE->>SCORE : OK
 ```
 
