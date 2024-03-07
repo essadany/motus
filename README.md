@@ -9,14 +9,15 @@ sequenceDiagram
     USER->>+AUTHENTIFICATION: POST /login
     AUTHENTIFICATION->>USER:OK
     AUTHENTIFICATION->>+LOCALSTORAGE : setLocalStorage(username)
-    MOTUS->>+LOCALSTORAGE : GET /
-    note right of LOCALSTORAGE : get the username to identify the user
 ```
 #Phase de jeux
 ```mermaid
 sequenceDiagram
+    MOTUS->>+LOCALSTORAGE : GET /
+    note left of LOCALSTORAGE : get the username to identify the user
+    LOCALSTORAGE->>MOTUS: username
     USER->>+MOTUS:POST /checkword  inputWord
-    note left of MOTUS : calcul nb tentative + score
+    note right of MOTUS : calcul nb tentative + score
     MOTUS->>USER : result
     MOTUS->>+SCORE : POST /setscore {username, score, tries}
     SCORE->>REDIS : store {username, score, tries}
@@ -26,6 +27,9 @@ sequenceDiagram
 #Phase de visualisation du score
 ```mermaid
 sequenceDiagram
+    SCORE->>+LOCALSTORAGE : GET /
+    note left of LOCALSTORAGE : get the username to identify the user
+    LOCALSTORAGE->>SCORE: username
     SCORE->>+REDIS : GET /getscore
     REDIS->>SCORE : OK
 ```
