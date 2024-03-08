@@ -8,8 +8,7 @@ WORKDIR /src
 COPY . .
 
 # Install any dependencies
-RUN npm install express
-RUN npm install axios
+RUN npm install express express-session axios redis  connect-redis
 
 
 # Define the command to run the app

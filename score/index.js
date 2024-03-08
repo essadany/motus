@@ -2,15 +2,48 @@ const express = require('express');
 const redis = require('redis');
 const app = express();
 const path = require('path');
+const session = require('express-session');
+let RedisStore = require('connect-redis').default;
+const bodyParser = require('body-parser');
 const { get } = require('http');
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(express.json()); // Middleware to parse JSON bodies
 let username = 'sutdent-laptop';
-// Create Redis client
-
-const client = redis.createClient(
-  { host: 'localhost', port: 6379 }
+let client = redis.createClient(
+  { socket: {
+    host: 'localhost',
+    port: 6379,
+  },
+  // Pour la reconnexion automatique
+  autoResendUnfulfilledCommands: true,
+  autoResubscribe: true }
 );
+let SessionClient = redis.createClient({ socket: {
+  host: 'localhost',
+  port: 6381,
+},
+// Pour la reconnexion automatique
+autoResendUnfulfilledCommands: true,
+autoResubscribe: true });
+app.use(session({
+  store: new RedisStore({ client: SessionClient }),
+  secret: 'authentification-redis-secret',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false } 
+}));
+app.post('/logout', (req, res) => {
+  req.session.destroy((err) => {
+      if (err) {
+          return console.log(err);
+      }
+      res.redirect('http://localhost:9000');
+  });
+});
 
 client.on('error', err => console.log('Redis Client Error', err));
 client.connect().then(() => {
@@ -18,11 +51,10 @@ client.connect().then(() => {
  })
 
 
-app.use(express.static(path.join(__dirname, 'public')));
 // get the data form redis
 app.get('/getscore',  (req, res) => {
-  client.hGetAll(`user-session:${username}`).then((user) => {
-    console.log('user : ',user);
+  client.hGetAll(`user-session:student-laptop`).then((user) => {
+    console.log('user : ',JSON.stringify(user));
     res.json(user);
   })
 }
@@ -41,24 +73,7 @@ app.post('/setscore', async (req, res) => {
 
 // Endpoint to get scores
 app.get('/', async (req, res) => {
-  //get the username from local storage
-  username = localStorage.getItem('username');
-  
-
-  /* const user = await client.get('user-session:123');
-  console.log('user : ',user);
-  try {
-    const scoreResponse = await axios.post('http://localhost:3000/getscore', {
-        username: user.username,
-        score: user.score,
-        tries: user.tries
-    });
-    console.log(scoreResponse.data);
-    res.json(scoreResponse.data);
-} catch (error) {
-    console.error('Error posting to score service:', error);
-    res.status(500).json({ error: "Erreur lors de la communication avec le service de score" });
-} */
+  res.send('Hello World!')
 });
 
 

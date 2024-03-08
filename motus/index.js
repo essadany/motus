@@ -2,15 +2,40 @@ const express = require('express')
 const app = express()
 const fs = require('fs');
 const path = require('path');
+const redis = require('redis');
+let RedisStore = require('connect-redis').default;
 const axios = require('axios');
 const bodyParser = require('body-parser');
 const os = require('os');
+const session = require('express-session');
 const port = process.env.PORT || 3000; // Utilise la variable d'environnement PORT, ou 3000 par défaut
 let score = 0;
 let tries = 0;
 let username = 'useranme';
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(bodyParser.urlencoded({ extended: false }));
+let SessionClient = redis.createClient({ socket: {
+  host: 'localhost',
+  port: 6381,
+},
+// Pour la reconnexion automatique
+autoResendUnfulfilledCommands: true,
+autoResubscribe: true });
+app.use(session({
+  store: new RedisStore({ client: SessionClient }),
+  secret: 'authentification-redis-secret',
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false } 
+}));
+app.post('/logout', (req, res) => {
+  req.session.destroy((err) => {
+      if (err) {
+          return console.log(err);
+      }
+      res.redirect('http://localhost:9000');
+  });
+});
 
 //get the score from the score service
 app.post('/getscore', async (req, res) => {
@@ -18,7 +43,6 @@ app.post('/getscore', async (req, res) => {
   const { username, score, tries } = req.body;
   score = score;
   tries = tries;
-  console.log('received_data : ',received_data);
 });
 app.get('/', (req, res) => {
   res.send('Hello World!')
@@ -76,12 +100,12 @@ app.post('/checkword', async (req, res) => {
       }
 
       if (userWord === wordOfTheDay) {
-          score++;
+          score = 1;
       }
       console.log('SCORE : ', score);
 
       // Increment tries
-      tries++;
+      tries=1;
       console.log('TRIES : ', tries);
 
       // Post score and tries to the score service
@@ -101,6 +125,7 @@ app.post('/checkword', async (req, res) => {
 
           // Send the combined response back to the client
           res.json(finalResponse);
+          score = 0;
       } catch (error) {
           console.error('Error posting to score service:', error);
           res.status(500).json({ error: "Erreur lors de la communication avec le service de score" });

@@ -1,9 +1,5 @@
-/*$.get('/setscore').then((data) => {
-    $('#score').html(data.score);
-    console.log('data : ', data)
-});*/
-
-fetch('/getscore', {
+document.addEventListener('DOMContentLoaded', (event) => {
+    fetch('/getscore', {
         headers: {
             'Content-Type': 'application/json'
         }
@@ -17,3 +13,17 @@ fetch('/getscore', {
     .catch(error => {
         console.error('Error:', error);
     });
+
+    document.getElementById('logoutButton').addEventListener('click', function() {
+        fetch('/logout', {
+            method: 'POST',
+        })
+        .then(response => {
+            if (response.redirected) {
+                window.location.href = response.url;
+            }
+        })
+        .catch(error => console.error('Erreur lors de la déconnexion:', error));
+    });
+}
+);
