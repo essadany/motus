@@ -20,10 +20,13 @@ services:
       - motus-app1
       - motus-app2
   
-  auth_in_motus:
+  auth:
     build: ./authentification
     ports:
-      - "5001:5001"
+      - "9000:9000"
+    depends_on:
+      - motus-app1
+      - motus-app2
 
   score:
     build: ./score
@@ -46,22 +49,7 @@ services:
     volumes:
       - redis-data:/data
 
-  grafana:
-    image: grafana/grafana
-    container_name: grafana
-    ports:
-      - 3000:6000
-    restart: unless-stopped
-    networks:
-      - monitor-net
-  loki:
-    image: grafana/loki
-    container_name: loki
-    ports:
-      - 3100:3100
-    restart: unless-stopped
-    networks:
-      - monitor-net
+  
 volumes:
   redis-data:
 
