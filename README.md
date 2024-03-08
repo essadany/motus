@@ -10,16 +10,16 @@ sequenceDiagram
     AUTHENTIFICATION->>REDIS_AUTH: verify if the username and password are correct
     REDIS_AUTH->>AUTHENTIFICATION: OK
     AUTHENTIFICATION->>USER:OK
-    note left of AUTHENTIFICATION: create a session and store username
+    note left of AUTHENTIFICATION: create a session and store it in redis_session
 ```
-# Phase de jeux
+# Phase de jeu
 ```mermaid
 sequenceDiagram
     USER->>+MOTUS:POST /checkword  inputWord
     note left of MOTUS : calcul nb tentative(tries) + score
     MOTUS->>USER : result
-    note left of MOTUS: verify if the session exists (user authentified) then get the username from the session
-    MOTUS->>+SCORE : POST /setscore {username, score, tries}
+    note left of MOTUS: verify if the session exists (user authentified) then get the username from the redis_session
+    MOTUS->>+SCORE : POST /setscore {score, tries}
     SCORE->>REDIS_SCORE : store {username, score, tries}
     REDIS_SCORE->>SCORE : OK
     SCORE->>MOTUS : OK
@@ -32,13 +32,8 @@ sequenceDiagram
     USER->>SCORE : send username
     SCORE->>USER : OK
     SCORE->>+REDIS_SCORE : GET /getscore
-    note left of REDIS_SCORE : username is knowen from session
+    note left of REDIS_SCORE : username is knowen from redis_session
     REDIS_SCORE->>SCORE : OK
 ```
 
-flowchart LR
-    user-->motus
-    motus-->|getscore|score
-    motus-->|setscore|score
-    score-->redis
 ![MOTUS_SCORE](https://github.com/essadany/motus/assets/100642085/7fb9f715-2294-496e-9634-0d004f288e88)
