@@ -28,7 +28,7 @@ client.on("error", function (err) {
   console.log("Error " + err);
 }
 );
-client.hmset("test", "firstname", "test", "lastname", "test", "username", "test", "password", "test");
+client.hSet("test", "firstname", "test", "lastname", "test", "username", "test", "password", "test");
 
 // a variable to save a session
 
