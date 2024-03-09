@@ -51,7 +51,7 @@ Pour lancer ce projet, assurez-vous d'abord que vous avez Docker et Docker Compo
 1. Clonez le dépôt GitHub :
 
 ```bash
-git clone url_de_votre_projet
+git https://github.com/essadany/motus.git
 cd motus
 docker-compose -f "docker-compose.yaml" up -d --build 
 
