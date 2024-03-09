@@ -54,6 +54,6 @@ Pour lancer ce projet, assurez-vous d'abord que vous avez Docker et Docker Compo
 git https://github.com/essadany/motus.git
 cd motus
 docker-compose -f "docker-compose.yaml" up -d --build 
-
+```
 
 ![MOTUS_SCORE](https://github.com/essadany/motus/assets/100642085/7fb9f715-2294-496e-9634-0d004f288e88)
