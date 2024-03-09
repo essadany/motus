@@ -55,5 +55,6 @@ git https://github.com/essadany/motus.git
 cd motus
 docker-compose -f "docker-compose.yaml" up -d --build 
 ```
+Normalement, le porjet se lance avec tous les containers sans bug, mais pour moi j'ai crée les images des dockerfiles avant d'éxecuter le docker compose, et je ne suis pas sûr quant vous clonez le porjet github si vous devez créer les images à partir des dockerfiles existants, ou il suffit directement de lancer le docker compose.
 
 ![MOTUS_SCORE](https://github.com/essadany/motus/assets/100642085/7fb9f715-2294-496e-9634-0d004f288e88)
